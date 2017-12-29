@@ -1,44 +1,50 @@
-let R;
-let r;
-let step = 1;
+let step = 0;
 let t;
-let p;
-let x;
-let y;
-let prevX, prevY;
-let l, k, ang;
+let graphs = [];
+let m = 3, n = 3;
 
 function setup() { 
-  createCanvas(800, 600);
+  createCanvas(windowWidth, windowHeight);
   background(220);
   noFill();
-  R = Math.floor(random(100, 300));
-  r = Math.floor(random(30, R - 50));
-  p = Math.floor(random(10, r - 10));
-  k = r / R;
-  l = p / r;
-  console.log('p: ', p);
-  console.log('R: ', R);
-  console.log('r: ', r);
+  for (let j = 0; j < n; j++) {
+    for (let i = 0; i < m; i++) {
+      graphs.push(new Graph(120 + width * i / m, 120 + height * j / n));
+    }
+  }
 } 
 
 function draw() {
-  // ellipse(width / 2, height / 2, R * 2, R * 2);
-  if (step < 20000) {  
-    push();
-    translate(width / 2, height / 2);
+  graphs.forEach(g => {
+    g.display();
+  });
+}
 
-    t = radians(step);
-    ang = ((l-k)/k) * t;
+function Graph(centerX, centerY) {
+  this.centerX = centerX;
+  this.centerY = centerY;
+  this.ang = 0;
+  this.R = Math.floor(random(80, 120));
+  this.r = Math.floor(random(20, this.R - 20));
+  this.p = Math.floor(random(5, this.r - 5));
+  this.k = this.r / this.R;
+  this.l = this.p / this.r;
 
-    x = R * ((1-k) * Math.cos(t) + ((l*k) * Math.cos(ang)));
-    y = R * ((1-k) * Math.sin(t) - ((l*k) * Math.sin(ang)));
-
-    line(prevX, prevY, x, y,);
-    pop();
-    step+=4;
-
-    prevX = x;
-    prevY = y;
+  this.display = function() {
+    if (step < 100000) {  
+      push();
+      translate(this.centerX, this.centerY);
+      t = radians(step);
+      this.ang = ((this.l - this.k) / this.k) * t;
+  
+      this.x = this.R * ((1 - this.k) * Math.cos(t) + ((this.l * this.k) * Math.cos(this.ang)));
+      this.y = this.R * ((1 - this.k) * Math.sin(t) - ((this.l * this.k) * Math.sin(this.ang)));
+  
+      line(this.prevX, this.prevY, this.x, this.y,);
+      pop();
+      step += 2;
+      this.prevX = this.x;
+      this.prevY = this.y;
+    }
   }
 }
