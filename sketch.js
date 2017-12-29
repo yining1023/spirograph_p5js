@@ -32,7 +32,7 @@ function Graph(centerX, centerY) {
   this.l = this.p / this.r;
 
   this.display = function() {
-    if (step < 20000) {  
+    if (step < 30000) {  
       push();
       translate(this.centerX, this.centerY);
       t = radians(step);
